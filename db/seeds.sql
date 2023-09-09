@@ -11,6 +11,11 @@ VALUES ("Cashier", 20000, 1),
        ("Sorter", 20000, 4);
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Rebecca", "S", 4),
-       ("John", "D", 3),
-       ("Matt", "M", 3, 1);
+VALUES ("Rebecca", "S", 1, null),
+       ("John", "D", 1, null),
+       ("Matt", "M", 4, 1);
+
+-- query
+SELECT employee.role_id, role.title
+FROM employee
+JOIN role ON employee.role_id = role.id;
