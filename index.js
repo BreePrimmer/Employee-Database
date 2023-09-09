@@ -1,5 +1,15 @@
 const inquirer = require('inquirer');
-const mysql2 = require('mysql2');
+const mysql = require('mysql2');
+
+const db = mysql.createConnection(
+    {
+        host: 'localhost',
+        user: 'root',
+        password: 'redPenguin26',
+        database: 'employee_db'
+    },
+    console.log('Connected to the employee_db database.')
+);
 
 // data for the inquirer prompt to show the db menu.
 const dbMenu = [
@@ -21,6 +31,9 @@ const dbMenu = [
 // function to view the employee table
 viewAllEmployees = () => {
     console.log('You are now viewing the employees (:')
+    db.query('SELECT * FROM department', function (err, results) {
+        console.log(results)
+    })
 }
 
 // function to add an employee to the table
