@@ -30,11 +30,16 @@ const dbMenu = [
 
 // function to view the employee table
 viewAllEmployees = () => {
-    console.log('You are now viewing the employees (:')
-    db.query('SELECT * FROM department', function (err, results) {
-        console.log(results)
+    db.query('SELECT a.id, a.first_name, a.last_name, department.name as department, role.title as title, role.salary as salary, b.first_name as manager FROM employee a LEFT JOIN employee b on a.manager_id = b.id JOIN role on a.role_id = role.id JOIN department on role.department_id = department.id', function (err, results) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.table(results);  
+            startMenu();
+        }
     })
 }
+
 
 // function to add an employee to the table
 addEmployees = () => {
