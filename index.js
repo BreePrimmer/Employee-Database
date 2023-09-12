@@ -1,5 +1,8 @@
 const inquirer = require('inquirer');
 const mysql = require('mysql2');
+const queries = require('./queries.js');
+
+const newQuery = new queries
 
 const db = mysql.createConnection(
     {
@@ -49,16 +52,16 @@ const emptyInt = (input) => {
 }
 
 // function to view the employee table
-const viewAllEmployees = () => {
-    db.query('SELECT a.id, a.first_name, a.last_name, department.name as department, role.title as title, role.salary as salary, b.first_name as manager FROM employee a LEFT JOIN employee b on a.manager_id = b.id JOIN role on a.role_id = role.id JOIN department on role.department_id = department.id', function (err, results) {
-        if (err) {
-            console.log(err);
-        } else {
-            console.table(results);  
-            startMenu();
-        }
-    })
-}
+// const viewAllEmployees = () => {
+//     db.query('SELECT a.id, a.first_name, a.last_name, department.name as department, role.title as title, role.salary as salary, b.first_name as manager FROM employee a LEFT JOIN employee b on a.manager_id = b.id JOIN role on a.role_id = role.id JOIN department on role.department_id = department.id', function (err, results) {
+//         if (err) {
+//             console.log(err);
+//         } else {
+//             console.table(results);  
+//             startMenu();
+//         }
+//     })
+// }
 
 // function to add an employee to the table
 const addEmployees = () => {
@@ -115,11 +118,25 @@ const addDepartment = () => {
 
 
 // function to start the menu and run the functions based on the response.
-const startMenu = () => {
-    inquirer.prompt(dbMenu).then((response) => {
+const startMenu = async () => {
+    await inquirer.prompt(dbMenu).then((response) => {
         console.log(response.menu)
         if (response.menu == 'View All Employees') {
-            viewAllEmployees()
+            newQuery.viewAllEmployees();
+            // inquirer.prompt([
+            //     {
+            //         type: 'list',
+            //         name: 'goback',
+            //         message: 'What would you like to do?',
+            //         choices: ['Go Back', 'Exit']
+            //     }
+            // ]).then((data) => {
+            //     if (data.goback == 'Go Back') {
+            //         startMenu();
+            //     } else if (data.goback == 'Exit') {
+            //         return '^C'
+            //     }
+            // })
         } else if (response.menu == 'Add Employees') {
             addEmployees();
         } else if (response.menu == 'View All Departments') {
@@ -130,9 +147,9 @@ const startMenu = () => {
             viewAllRoles();
         } else {
             return
-        }
-
-})
+        };
+    })
+    startMenu()
 }
 
 startMenu()
