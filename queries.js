@@ -19,7 +19,15 @@ class Queries {
                 console.table(results);  
             }
         })
-    }
+    };
+
+    addEmployee() {
+
+    };
+
+    addRole() {
+        db.query('')
+    };
 }
 
 module.exports = Queries

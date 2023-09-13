@@ -64,9 +64,9 @@ const emptyInt = (input) => {
 // }
 
 // function to add an employee to the table
-const addEmployees = () => {
-    console.log('Would you like to add an employee?')
-}
+// const addEmployees = () => {
+//     console.log('Would you like to add an employee?')
+// }
 
 // function to update employee role
 
@@ -85,18 +85,56 @@ const viewAllRoles = () => {
 }
 
 // function to add role
+const addRole = async () => {
+    // db.query(
+    //     'SELECT * FROM department;', function (err, results){
+    //         if (err) {
+    //             console.log(err)
+    //         } else {
+    //             return
+    //         }
+    //         const departments = results.map(department => ({
+    //             name: department.name,
+    //             value: department.id})); 
+    //     });
+    await inquirer.prompt([
+        {
+            type: 'input',
+            name: 'newRole',
+            message: 'Please enter the name of the role you would like to add.',
+            validate: emptyString
+        },
+        {
+            type: 'input',
+            name: 'newSalary',
+            message:'Please enter the salary of the role.',
+            validate: emptyString
+        },
+        {
+            type: 'input',
+            name: 'newDepartment',
+            message: 'Which department does this role belong to?',
+        }
+    ]).then((roleadd) => {
+        db.query(`INSERT INTO role (title, salary) VALUES ('${roleadd.newRole}', ${roleadd.newSalary});`);
+        // db.query(`INSERT INTO role (salary) VALUES ('${roleadd.newSalary}')`);
+        // db.query(`INSERT INTO department (name) VALUES ('${roleadd.newDepartment}')`)
+    });
+    db.query('SELECT * FROM role');
+    viewAllRoles();
+};
 
 // function to view all departments
-const viewAllDepartments = () => {
-    db.query('SELECT * FROM department', function (err, results) {
-        if (err) {
-            console.log(err);
-        } else {
-            console.table(results);
-            startMenu()
-        }
-    })
-}
+// const viewAllDepartments = () => {
+//     db.query('SELECT * FROM department', function (err, results) {
+//         if (err) {
+//             console.log(err);
+//         } else {
+//             console.table(results);
+//             startMenu()
+//         }
+//     })
+// }
 
 // function to add department
 const addDepartment = () => {
@@ -145,12 +183,13 @@ const startMenu = async () => {
             addDepartment();
         } else if (response.menu == 'View All Roles') {
             viewAllRoles();
+        } else if (response.menu == 'Add Role') {
+            addRole();
         } else {
             return
         };
-    })
-    startMenu()
-}
+    });
+};
 
-startMenu()
+startMenu();
 
