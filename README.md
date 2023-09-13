@@ -1,5 +1,9 @@
 # Employee-Database
 
+
+
+Click [here](https://watch.screencastify.com/v/wKAwTTopkqqTyK4BdZQQ) to watch the walkthrough video!
+
 "SQL join a table to itself" from w3resource
 https://www.w3resource.com/sql/joins/join-a-table-to-itself.php
 
