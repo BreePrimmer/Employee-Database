@@ -1,9 +1,11 @@
 const inquirer = require('inquirer');
 const mysql = require('mysql2');
-const queries = require('./queries.js');
 
+// importing the queries class (unused)
+const queries = require('./queries.js');
 const newQuery = new queries
 
+// creating connection to database
 const db = mysql.createConnection(
     {
         host: 'localhost',
@@ -52,23 +54,28 @@ const emptyInt = (input) => {
 }
 
 // function to view the employee table
-// const viewAllEmployees = () => {
-//     db.query('SELECT a.id, a.first_name, a.last_name, department.name as department, role.title as title, role.salary as salary, b.first_name as manager FROM employee a LEFT JOIN employee b on a.manager_id = b.id JOIN role on a.role_id = role.id JOIN department on role.department_id = department.id', function (err, results) {
-//         if (err) {
-//             console.log(err);
-//         } else {
-//             console.table(results);  
-//             startMenu();
-//         }
-//     })
-// }
+const viewAllEmployees = () => {
+    db.query('SELECT a.id, a.first_name, a.last_name, department.name as department, role.title as title, role.salary as salary, b.first_name as manager FROM employee a LEFT JOIN employee b on a.manager_id = b.id JOIN role on a.role_id = role.id JOIN department on role.department_id = department.id', function (err, results) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.table(results);  
+            startMenu();
+        }
+    })
+}
 
 // function to add an employee to the table
-// const addEmployees = () => {
-//     console.log('Would you like to add an employee?')
-// }
+const addEmployees = () => {
+    console.log('Currently unable to add an employee );');
+    startMenu();
+}
 
 // function to update employee role
+const updateEmployeeRole = () => {
+    console.log('Currently unable to update employee role. );');
+    startMenu();
+}
 
 // function to view all roles
 const viewAllRoles = () => {
@@ -85,56 +92,63 @@ const viewAllRoles = () => {
 }
 
 // function to add role
-const addRole = async () => {
+const addRole = () => {
+    // let departments = [];
+    // let departmentdata;
     // db.query(
     //     'SELECT * FROM department;', function (err, results){
-    //         if (err) {
-    //             console.log(err)
-    //         } else {
-    //             return
-    //         }
-    //         const departments = results.map(department => ({
-    //             name: department.name,
-    //             value: department.id})); 
+    //         if (err) throw err;
+    //         let departmentdata = results;
+    //         console.log(departmentdata);
+
+    //         results.forEach((department) => departments.push(department.name))
+    //         console.log(departments);   
     //     });
-    await inquirer.prompt([
-        {
-            type: 'input',
-            name: 'newRole',
-            message: 'Please enter the name of the role you would like to add.',
-            validate: emptyString
-        },
-        {
-            type: 'input',
-            name: 'newSalary',
-            message:'Please enter the salary of the role.',
-            validate: emptyString
-        },
-        {
-            type: 'input',
-            name: 'newDepartment',
-            message: 'Which department does this role belong to?',
-        }
-    ]).then((roleadd) => {
-        db.query(`INSERT INTO role (title, salary) VALUES ('${roleadd.newRole}', ${roleadd.newSalary});`);
-        // db.query(`INSERT INTO role (salary) VALUES ('${roleadd.newSalary}')`);
-        // db.query(`INSERT INTO department (name) VALUES ('${roleadd.newDepartment}')`)
-    });
-    db.query('SELECT * FROM role');
-    viewAllRoles();
+    // await inquirer.prompt([
+    //     {
+    //         type: 'input',
+    //         name: 'newRole',
+    //         message: 'Please enter the name of the role you would like to add.',
+    //         validate: emptyString
+    //     },
+    //     {
+    //         type: 'input',
+    //         name: 'newSalary',
+    //         message:'Please enter the salary of the role.',
+    //         validate: emptyString
+    //     },
+    //     {
+    //         type: 'list',
+    //         name: 'newDepartment',
+    //         message: 'Which department does this role belong to?',
+    //         choices: departments
+    //     }
+    // ]).then((roleadd) => {
+    //     let departmentId = departmentdata.find(dept => dept.name === roleadd.newDepartment);
+    //     console.log(departmentId)
+
+    //     db.query(`INSERT INTO role (title, salary, department_id) VALUES ('${roleadd.newRole}', ${roleadd.newSalary}, ${departmentId.id})`, function (err, results) {
+    //         if (err) throw err;
+    //         console.table(results);
+    //     })
+    //     // db.query(`INSERT INTO role (title, salary, department_id) VALUES ('${roleadd.newRole}', ${roleadd.newSalary}, ${roleadd.newDepartment} );`);
+    //     // db.query(`INSERT INTO department (name) VALUES ('${roleadd.newDepartment}')`)
+    // });
+    console.log('Currently unable to add a role. );');
+    startMenu();
 };
 
 // function to view all departments
-// const viewAllDepartments = () => {
-//     db.query('SELECT * FROM department', function (err, results) {
-//         if (err) {
-//             console.log(err);
-//         } else {
-//             console.table(results);
-//             startMenu()
-//         }
-//     })
-// }
+const viewAllDepartments = () => {
+    db.query('SELECT * FROM department', function (err, results) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.table(results);
+            startMenu()
+        }
+    })
+}
 
 // function to add department
 const addDepartment = () => {
@@ -160,21 +174,7 @@ const startMenu = async () => {
     await inquirer.prompt(dbMenu).then((response) => {
         console.log(response.menu)
         if (response.menu == 'View All Employees') {
-            newQuery.viewAllEmployees();
-            // inquirer.prompt([
-            //     {
-            //         type: 'list',
-            //         name: 'goback',
-            //         message: 'What would you like to do?',
-            //         choices: ['Go Back', 'Exit']
-            //     }
-            // ]).then((data) => {
-            //     if (data.goback == 'Go Back') {
-            //         startMenu();
-            //     } else if (data.goback == 'Exit') {
-            //         return '^C'
-            //     }
-            // })
+            viewAllEmployees();
         } else if (response.menu == 'Add Employees') {
             addEmployees();
         } else if (response.menu == 'View All Departments') {
@@ -185,6 +185,11 @@ const startMenu = async () => {
             viewAllRoles();
         } else if (response.menu == 'Add Role') {
             addRole();
+        } else if (response.menu == 'Update Employee Role') {
+            updateEmployeeRole();
+        } else if (response.menu == 'Quit') {
+            console.log('Good Bye! (:');
+            process.exit()
         } else {
             return
         };
